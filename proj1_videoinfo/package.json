@@ -1,0 +1,27 @@
+{
+  "name": "proj1_videoinfo",
+  "version": "1.0.0",
+  "description": "electron course project that allows users to pick a video file from disk and get its length",
+  "main": "index.js",
+  "scripts": {
+    "electron": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abudesai/electron_videoinfo.git"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "Abu Desai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abudesai/electron_videoinfo/issues"
+  },
+  "homepage": "https://github.com/abudesai/electron_videoinfo#readme",
+  "dependencies": {
+    "electron": "^5.0.6",
+    "electron-reload": "^1.4.0",
+    "fluent-ffmpeg": "^2.1.2"
+  }
+}
