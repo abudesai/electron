@@ -1,0 +1,17 @@
+{
+  "name": "proj2_sillytodos",
+  "version": "1.0.0",
+  "description": "electron project doing todos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": "abu desai",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^5.0.6"
+  }
+}
