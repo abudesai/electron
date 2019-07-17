@@ -4,7 +4,7 @@
   "description": "electron project doing todos",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "electron": "electron ."
   },
   "keywords": [
     "electron"
@@ -12,6 +12,7 @@
   "author": "abu desai",
   "license": "ISC",
   "dependencies": {
-    "electron": "^5.0.6"
+    "electron": "^5.0.6",
+    "electron-reload": "^1.4.1"
   }
 }
