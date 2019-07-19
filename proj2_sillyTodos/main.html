@@ -5,5 +5,28 @@
 </head>
 <body>
 	<h1>My Todos</h1>
+
+	<ul>
+		
+	</ul>
+
+	<script type="text/javascript">
+		const electron = require("electron");
+		const {ipcRenderer} = electron;
+		const ul = document.querySelector('ul');
+
+		ipcRenderer.on("todo:add", (event, todo) => {
+			const li = document.createElement('li');
+			const text = document.createTextNode(todo);
+			li.appendChild(text);
+			ul.append(li);
+		});
+
+		ipcRenderer.on("todos:clear", (event) => {
+			console.log('clear todo IPC received')			
+			ul.innerHTML = '';
+		});
+
+	</script>
 </body>
 </html>
