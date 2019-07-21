@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
+import { ipcRenderer } from "electron";
+
 
 import Header from "./Header";
 import TasksIndex from "./TasksIndex";
@@ -7,6 +9,7 @@ import TasksShow from "./TasksShow";
 import Timer from "../utils/Timer";
 import Settings from "./Settings";
 
+localStorage.clear();
 const APP_DATA = JSON.parse(localStorage.getItem("__INITIAL_STATE__"));
 
 const INITIAL_STATE = {
@@ -48,14 +51,15 @@ class App extends Component {
   };
 
   updateTrayText = title => {
-
+    //title is the time_left text to display in the task bar 
+    ipcRenderer.send("update-timer", title); 
   };
 
   timerHasExpired = () => {
-
+    ipcRenderer.send("update-timer", ""); //title is the text to display in the task bar 
   };
 
-  // -------- end of electron event handerls ----------
+  // -------- end of electron event handlers ----------
 
   componentDidMount() {
     this.initializeTimer();

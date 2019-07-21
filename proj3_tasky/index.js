@@ -1,62 +1,51 @@
 
 const path = require('path');
 const electron = require("electron");
-const {app, BrowserWindow, Tray} = electron;
-let trayItem; 
+const { app, ipcMain } = electron;
+const TimerTray = require("./app/timer_tray");
+const MainWindow = require("./app/main_window")
 
 // // Enable live reload for content
 require('electron-reload')(__dirname);
 
 let mainWindow;
+let timerTray;
+
 const bootFunc = () => {
-	
+
 	console.log('app is now ready');
-	mainWindow = new BrowserWindow({
-		webPreferences: {  nodeIntegration: true },
+
+	const options = {
+		webPreferences: {  
+			nodeIntegration: true,
+			backgroundThrottling: false  //doesn't work as advertised
+		},
 		width: 300,
 		height: 500, 
 		frame:false,
 		resizable:false,
-		show:false
-	});
-	mainWindow.loadURL(`file://${__dirname}/src/index.html`);
+		show:false,
+		skipTaskbar: true
+	};
 
-	// this will automatically open dev tools when the window is created. Just for convenience
-	// mainWindow.webContents.openDevTools();
+	mainWindow = new MainWindow(options);
+	mainWindow.loadURL(`file://${__dirname}/src/index.html`);
 
 	// Tray object
 	const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
 	const iconPath = path.join(__dirname, `./src/assets/${iconName}`);
 	// console.log('path:', iconPath);
-
 	
-	trayItem = new Tray(iconPath); 
-
-	trayItem.on('click', (event, bounds) => {
-
-		// click event bounds
-		const { x, y } = bounds;
-		// console.log('click event bounds (position):', x, y);
-
-		// get overall our main app window dimensions
-		const { height, width } = mainWindow.getBounds();
-		// console.log('window dimensions: ', height, width)
-		
-		if (mainWindow.isVisible()) {
-			mainWindow.hide();
-		} else {
-			// set position of the window
-			mainWindow.setBounds({
-				x: x - width/2,
-				y: process.platform === 'win32' ? y - height : y,
-				height,
-				width
-			});
-			mainWindow.show();
-		}	
-	})
-	// trayItem.setHighlightMode('always');
+	timerTray = new TimerTray(iconPath, mainWindow); 
 }
 
 // app.on( 'event we are listening for', 'func to run when event occurs')
 app.on('ready', bootFunc);
+
+ipcMain.on('update-timer', (event, title) => {
+	// title is the time left
+	console.log('tray title', title);
+
+	// setTitle not supported on Windows. So this doesn't work. 
+	timerTray.setTitle(title);
+});
