@@ -56,7 +56,7 @@ ipcMain.on('todo:add', (event, todo) => {
 });
 // --------------------------------------------------------------------------------------
 function clearTodos(){
-	console.log('clear todos clicked!')
+	// console.log('clear todos clicked!')
 	mainWindow.webContents.send('todos:clear');
 }
 
