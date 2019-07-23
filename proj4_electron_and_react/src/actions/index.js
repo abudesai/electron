@@ -23,12 +23,21 @@ export const addVideos = videos => dispatch => {
 export const convertVideos = videos => (dispatch, getState) => {
   console.log("Sending video to electron for format conversion");
   ipcRenderer.send("conversion:start", videos);
+
+  ipcRenderer.on("conversion:end", (event, { video, outputPath}) => {
+    dispatch( { type: VIDEO_COMPLETE, payload: { ...video, outputPath} } );
+  }); 
+  
+  ipcRenderer.on("conversion:progress", (event, { video, timemark}) => {
+    dispatch( { type: VIDEO_PROGRESS, payload: { ...video, timemark} } );
+  }); 
+  
 };
 
 // TODO: Open the folder that the newly created video
 // exists in
 export const showInFolder = outputPath => dispatch => {
-
+  ipcRenderer.send("folder:open", outputPath)
 };
 
 export const addVideo = video => {

@@ -1,6 +1,6 @@
 
 const electron = require("electron");
-const {app, BrowserWindow, ipcMain} = electron;
+const {app, BrowserWindow, ipcMain, shell} = electron;
 const ffmpeg = require('fluent-ffmpeg');
 
 
@@ -58,15 +58,26 @@ ipcMain.on("videos:added", (event, videos) => {
 
 
 ipcMain.on("conversion:start", (event, videos) => {
-	console.log("Received videos from MainWindow for format conversion", videos);
-	const video = videos[0];
 
-	const outputDir = video.path.split(video.name)[0];
-	const outputFileName = video.name.split('.')[0];
-	const outputPath = `${outputDir}${outputFileName}.${video.format}`
-	console.log("OutputDir: ", outputDir);
-	console.log("outputFileName: ", outputFileName);
-	console.log("outputPath: ", outputPath);
-	// ffmpeg(video.path)
-	// 	.output('')
+	// console.log("Received videos from MainWindow for format conversion", videos);
+
+	videos.forEach( video => {
+		const outputDir = video.path.split(video.name)[0];
+		const outputFileName = video.name.split('.')[0];
+		const outputPath = `${outputDir}${outputFileName}.${video.format}`
+		// console.log("outputDir: ", outputDir);
+		// console.log("outputFileName: ", outputFileName);
+		// console.log("outputPath: ", outputPath);
+
+		ffmpeg(video.path)
+			.output(outputPath)
+			.on( 'progress', ( {timemark} ) => mainWindow.webContents.send( "conversion:progress", { video, timemark } ) )
+			.on( 'end', () => mainWindow.webContents.send( "conversion:end", { video, outputPath } ) )
+			.run();
+	});
+	
+});
+
+ipcMain.on("folder:open", (event, outputPath) => {
+	shell.showItemInFolder(outputPath);
 });
