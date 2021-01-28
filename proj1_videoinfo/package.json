@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/abudesai/electron_videoinfo#readme",
   "dependencies": {
-    "electron": "^5.0.6",
+    "electron": "^9.4.0",
     "electron-reload": "^1.4.0",
     "fluent-ffmpeg": "^2.1.2"
   }
